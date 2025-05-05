@@ -38,7 +38,9 @@ class ImplotConan(ConanFile):
             self.options.rm_safe("fPIC")
 
     def requirements(self):
-        if Version(self.version) >= "0.14":
+        if Version(self.version) == "0.16-docking":
+            self.requires("imgui/1.91.5-docking", transitive_headers=True)
+        elif Version(self.version) >= "0.14":
             self.requires("imgui/1.90.5", transitive_headers=True)
         elif Version(self.version) >= "0.13":
             # imgui 1.89 renamed ImGuiKeyModFlags_* to  ImGuiModFlags_*
