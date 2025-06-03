@@ -2,8 +2,7 @@ from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.files import get, copy, replace_in_file
 from conan.tools.scm import Version
-
-# conan create . --name=imnodes --version=0.5.0-docking
+import os
 
 class ImnodesConan(ConanFile):
     name = "imnodes"
