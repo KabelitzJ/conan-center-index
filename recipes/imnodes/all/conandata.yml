@@ -1,0 +1,4 @@
+sources:
+  "0.5.0-docking":
+    url: "https://github.com/Nelarius/imnodes/archive/refs/tags/v0.5.tar.gz"
+    sha256: "c19a1d8e3fabf71def02b98c43a3f4551f0a5bd3740a93474a356e8957ec2ab2"
