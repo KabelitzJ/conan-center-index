@@ -1,4 +1,7 @@
 sources:
+  "5.6.0":
+    url: "https://github.com/NVIDIA-Omniverse/PhysX/archive/refs/tags/107.0-physx-5.6.0.zip"
+    sha256: "3b8022df1fac232520582b2629a3452b40b0b1c6a2ff8573a4aba0706c699187"
   "4.1.2":
     url: "https://github.com/NVIDIAGameWorks/PhysX/archive/a2c0428acab643e60618c681b501e86f7fd558cc.zip"
     sha256: "d9c1939490a990277f8c773f288294cecb10e6fad8c820acad90fd4168b8ace3"
