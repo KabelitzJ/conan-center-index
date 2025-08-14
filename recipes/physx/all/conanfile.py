@@ -85,7 +85,7 @@ class PhysXConan(ConanFile):
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
-        self._patch_sources()
+        # self._patch_sources()
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -141,54 +141,54 @@ class PhysXConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.configure(build_script_folder=os.path.join(self.source_folder, "physx/compiler/public"))
-        cmake.build(build_type=self._get_physx_build_type())
+        cmake.build()
 
     def _get_cmakemodules_subfolder(self):
         return "CMakeModules" if self.settings.os == "Windows" else "cmakemodules"
 
-    def _patch_sources(self):
-        apply_conandata_patches(self)
+    # def _patch_sources(self):
+    #     apply_conandata_patches(self)
 
-        # There is no reason to force consumer of PhysX public headers to use one of
-        # NDEBUG or _DEBUG, since none of them relies on NDEBUG or _DEBUG
-        replace_in_file(self, os.path.join(self.source_folder, "pxshared", "include", "foundation", "PxPreprocessor.h"),
-                              "#error Exactly one of NDEBUG and _DEBUG needs to be defined!",
-                              "// #error Exactly one of NDEBUG and _DEBUG needs to be defined!")
+    #     # There is no reason to force consumer of PhysX public headers to use one of
+    #     # NDEBUG or _DEBUG, since none of them relies on NDEBUG or _DEBUG
+    #     replace_in_file(self, os.path.join(self.source_folder, "pxshared", "include", "foundation", "PxPreprocessor.h"),
+    #                           "#error Exactly one of NDEBUG and _DEBUG needs to be defined!",
+    #                           "// #error Exactly one of NDEBUG and _DEBUG needs to be defined!")
 
-        physx_source_cmake_dir = os.path.join(self.source_folder, "physx", "source", "compiler", "cmake")
+    #     physx_source_cmake_dir = os.path.join(self.source_folder, "physx", "source", "compiler", "cmake")
 
-        # Remove global and specifics hard-coded PIC settings
-        # (conan's CMake build helper properly sets CMAKE_POSITION_INDEPENDENT_CODE
-        # depending on options)
-        replace_in_file(self, os.path.join(physx_source_cmake_dir, "CMakeLists.txt"),
-                              "SET(CMAKE_POSITION_INDEPENDENT_CODE ON)", "")
-        for cmake_file in (
-            "FastXml.cmake",
-            "LowLevel.cmake",
-            "LowLevelAABB.cmake",
-            "LowLevelDynamics.cmake",
-            "PhysX.cmake",
-            "PhysXCharacterKinematic.cmake",
-            "PhysXCommon.cmake",
-            "PhysXCooking.cmake",
-            "PhysXExtensions.cmake",
-            "PhysXFoundation.cmake",
-            "PhysXPvdSDK.cmake",
-            "PhysXTask.cmake",
-            "PhysXVehicle.cmake",
-            "SceneQuery.cmake",
-            "SimulationController.cmake",
-        ):
-            target, _ = os.path.splitext(os.path.basename(cmake_file))
-            replace_in_file(self, os.path.join(physx_source_cmake_dir, cmake_file),
-                            f"SET_TARGET_PROPERTIES({target} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)", "")
+    #     # Remove global and specifics hard-coded PIC settings
+    #     # (conan's CMake build helper properly sets CMAKE_POSITION_INDEPENDENT_CODE
+    #     # depending on options)
+    #     replace_in_file(self, os.path.join(physx_source_cmake_dir, "CMakeLists.txt"),
+    #                           "SET(CMAKE_POSITION_INDEPENDENT_CODE ON)", "")
+    #     for cmake_file in (
+    #         "FastXml.cmake",
+    #         "LowLevel.cmake",
+    #         "LowLevelAABB.cmake",
+    #         "LowLevelDynamics.cmake",
+    #         "PhysX.cmake",
+    #         "PhysXCharacterKinematic.cmake",
+    #         "PhysXCommon.cmake",
+    #         "PhysXCooking.cmake",
+    #         "PhysXExtensions.cmake",
+    #         "PhysXFoundation.cmake",
+    #         "PhysXPvdSDK.cmake",
+    #         "PhysXTask.cmake",
+    #         "PhysXVehicle.cmake",
+    #         "SceneQuery.cmake",
+    #         "SimulationController.cmake",
+    #     ):
+    #         target, _ = os.path.splitext(os.path.basename(cmake_file))
+    #         replace_in_file(self, os.path.join(physx_source_cmake_dir, cmake_file),
+    #                         f"SET_TARGET_PROPERTIES({target} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)", "")
 
-        # No error for compiler warnings
-        replace_in_file(self, os.path.join(physx_source_cmake_dir, "windows", "CMakeLists.txt"),
-                              "/WX", "")
-        for cmake_os in ("linux", "mac", "android", "ios"):
-            replace_in_file(self, os.path.join(physx_source_cmake_dir, cmake_os, "CMakeLists.txt"),
-                                  "-Werror", "")
+    #     # No error for compiler warnings
+    #     replace_in_file(self, os.path.join(physx_source_cmake_dir, "windows", "CMakeLists.txt"),
+    #                           "/WX", "")
+    #     for cmake_os in ("linux", "mac", "android", "ios"):
+    #         replace_in_file(self, os.path.join(physx_source_cmake_dir, cmake_os, "CMakeLists.txt"),
+    #                               "-Werror", "")
 
     def _get_physx_build_type(self):
         if self.settings.build_type == "Debug":
@@ -212,7 +212,7 @@ class PhysXConan(ConanFile):
 
     def package(self):
         cmake = CMake(self)
-        cmake.install(build_type=self._get_physx_build_type())
+        cmake.install()
 
         save(self, os.path.join(self.package_folder, "licenses", "LICENSE"), self._get_license())
 

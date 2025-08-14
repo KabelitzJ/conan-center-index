@@ -37,7 +37,7 @@ class ImnodesConan(ConanFile):
 
     def requirements(self):
         if Version(self.version) == "0.5.0-docking":
-            self.requires("imgui/1.91.5-docking", transitive_headers=True)
+            self.requires("imgui/1.91.8-docking", transitive_headers=True)
 
     def generate(self):
         tc = CMakeToolchain(self)
