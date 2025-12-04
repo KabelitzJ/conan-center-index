@@ -4,6 +4,7 @@ from conan.tools.apple import is_apple_os
 from conan.tools.files import get, copy, rmdir, replace_in_file
 from conan.tools.build import check_min_cppstd
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
+from conan.tools.scm import Version
 
 import os
 
@@ -94,7 +95,6 @@ class OpenTelemetryCppConan(ConanFile):
            self.options.get_safe("with_otlp_file")
         ):
             self.requires("nlohmann_json/3.11.3")
-            self.requires("openssl/[>=1.1 <4]")
 
         if (self.options.with_zipkin or
            self.options.with_elasticsearch or
@@ -179,12 +179,21 @@ class OpenTelemetryCppConan(ConanFile):
         if self._needs_proto:
             protos_path = self.dependencies.build["opentelemetry-proto"].conf_info.get("user.opentelemetry-proto:proto_root").replace("\\", "/")
             protos_cmake_path = os.path.join(self.source_folder, "cmake", "opentelemetry-proto.cmake")
-            replace_in_file(self, protos_cmake_path,
-                            "if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/opentelemetry-proto/.git)",
-                            "if(1)")
-            replace_in_file(self, protos_cmake_path,
-                            '"${CMAKE_CURRENT_SOURCE_DIR}/third_party/opentelemetry-proto")',
-                            f'"{protos_path}")')
+
+            if Version(self.version) < "1.22.0":
+                replace_in_file(self, protos_cmake_path,
+                                "if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/opentelemetry-proto/.git)",
+                                "if(1)")
+                replace_in_file(self, protos_cmake_path,
+                                '"${CMAKE_CURRENT_SOURCE_DIR}/third_party/opentelemetry-proto")',
+                                f'"{protos_path}")')
+            else:
+                replace_in_file(self, protos_cmake_path,
+                                "elseif(EXISTS ${OPENTELEMETRY_PROTO_SUBMODULE}/.git)",
+                                "elseif(1)")
+                replace_in_file(self, protos_cmake_path,
+                                'SOURCE_DIR ${OPENTELEMETRY_PROTO_SUBMODULE}',
+                                f'SOURCE_DIR ${protos_path}')
 
         rmdir(self, os.path.join(self.source_folder, "api", "include", "opentelemetry", "nostd", "absl"))
 
@@ -349,7 +358,6 @@ class OpenTelemetryCppConan(ConanFile):
             self.options.with_elasticsearch
         ):
             self.cpp_info.components[self._http_client_name].requires.append("libcurl::libcurl")
-            self.cpp_info.components[self._http_client_name].requires.append("openssl::openssl")
 
         if self.options.with_otlp_http:
             self.cpp_info.components["opentelemetry_exporter_otlp_http_client"].requires.extend([
