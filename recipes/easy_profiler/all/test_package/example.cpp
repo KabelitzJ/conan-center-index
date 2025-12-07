@@ -41,15 +41,15 @@ void renderThread(){
 
 int main(int argc, char* argv[])
 {
-  #ifndef SAMPLE_NETWORK_TEST
-    EASY_PROFILER_ENABLE;
-  #endif
-    EASY_MAIN_THREAD;
-    profiler::startListen();
+//   #ifndef SAMPLE_NETWORK_TEST
+//     EASY_PROFILER_ENABLE;
+//   #endif
+//     EASY_MAIN_THREAD;
+//     profiler::startListen();
 
-    renderThread();
+//     renderThread();
 
-    std::cout << "SUCCESS" << std::endl;
-    
+//     std::cout << "SUCCESS" << std::endl;
+
     return 0;
 }
