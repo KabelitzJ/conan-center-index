@@ -49,6 +49,10 @@ class M4Conan(ConanFile):
         env.generate()
 
         tc = AutotoolsToolchain(self)
+        
+        if self.settings.compiler in ('clang', 'gcc'):
+            tc.extra_cflags.append("-std=c11")
+
         if is_msvc(self):
             tc.extra_cflags.append("-FS")
             # Avoid a `Assertion Failed Dialog Box` during configure with build_type=Debug
