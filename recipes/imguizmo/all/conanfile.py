@@ -62,8 +62,9 @@ class ImGuizmoConan(ConanFile):
             # Related to a breaking change: https://github.com/ocornut/imgui/blob/master/docs/CHANGELOG.txt#L912
             # Redirection: ImDrawList::AddBezierCurve() -> use ImDrawList::AddBezierCubic()
             replace_in_file(self, os.path.join(self.source_folder, "GraphEditor.cpp"), "AddBezierCurve", "AddBezierCubic")
-            replace_in_file(self, os.path.join(self.source_folder, "ImSequencer.cpp"), "CaptureMouseFromApp()", "SetNextFrameWantCaptureMouse(true)")
-            replace_in_file(self, os.path.join(self.source_folder, "ImGuizmo.cpp"), "CaptureMouseFromApp()", "SetNextFrameWantCaptureMouse(true)")
+            # Fix: CaptureMouseFromApp() was removed in favor of SetNextFrameWantCaptureMouse(true)
+            replace_in_file(self, os.path.join(self.source_folder, "ImSequencer.cpp"), "ImGui::CaptureMouseFromApp();", "ImGui::SetNextFrameWantCaptureMouse(true);")
+            replace_in_file(self, os.path.join(self.source_folder, "ImGuizmo.cpp"), "ImGui::CaptureMouseFromApp();", "ImGui::SetNextFrameWantCaptureMouse(true);")
         cmake = CMake(self)
         cmake.configure(build_script_folder=self.source_path.parent)
         cmake.build()
