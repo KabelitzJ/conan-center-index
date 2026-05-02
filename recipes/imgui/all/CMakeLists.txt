@@ -43,6 +43,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>
 )
+
+message(STATUS "imgui IMGUI_USE_WCHAR32 = ${IMGUI_USE_WCHAR32}")
+
+if(IMGUI_USE_WCHAR32)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_USE_WCHAR32)
+endif()
+
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 
 include(GNUInstallDirs)

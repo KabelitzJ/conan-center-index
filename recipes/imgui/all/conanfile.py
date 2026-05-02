@@ -20,12 +20,14 @@ class IMGUIConan(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "enable_test_engine": [True, False]
+        "enable_test_engine": [True, False],
+        "wchar32": [True, False]
     }
     default_options = {
         "shared": False,
         "fPIC": True,
-        "enable_test_engine": False
+        "enable_test_engine": False,
+        "wchar32": False
     }
 
     def export_sources(self):
@@ -61,6 +63,8 @@ class IMGUIConan(ConanFile):
             tc.preprocessor_definitions["IMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL"] = "1"
             tc.variables["IMGUI_ENABLE_TEST_ENGINE"] = "ON"
             tc.variables["IMGUI_TEST_ENGINE_DIR"] = os.path.join(self.source_folder, "test_engine").replace("\\", "/")
+        if self.options.get_safe("wchar32"):
+            tc.variables["IMGUI_USE_WCHAR32"] = "ON"
         tc.generate()
 
     def _patch_sources(self):
@@ -104,6 +108,8 @@ class IMGUIConan(ConanFile):
             self.cpp_info.system_libs.append("m")
         if self.settings.os == "Windows":
             self.cpp_info.system_libs.append("imm32")
+        if self.options.get_safe("wchar32"):
+            self.cpp_info.defines.append("IMGUI_USE_WCHAR32")
         self.cpp_info.srcdirs = [os.path.join("res", "bindings")]
 
         bin_path = os.path.join(self.package_folder, "bin")

@@ -43,7 +43,7 @@ class ImGuizmoConan(ConanFile):
 
     def requirements(self):
         if Version(self.version) == "1.83-docking":
-            self.requires("imgui/1.90.5-docking", transitive_headers=True)
+            self.requires("imgui/1.91.8-docking", transitive_headers=True)
         else:
             self.requires("imgui/1.90.5", transitive_headers=True)
 
@@ -62,6 +62,8 @@ class ImGuizmoConan(ConanFile):
             # Related to a breaking change: https://github.com/ocornut/imgui/blob/master/docs/CHANGELOG.txt#L912
             # Redirection: ImDrawList::AddBezierCurve() -> use ImDrawList::AddBezierCubic()
             replace_in_file(self, os.path.join(self.source_folder, "GraphEditor.cpp"), "AddBezierCurve", "AddBezierCubic")
+            replace_in_file(self, os.path.join(self.source_folder, "ImSequencer.cpp"), "CaptureMouseFromApp()", "SetNextFrameWantCaptureMouse(true)")
+            replace_in_file(self, os.path.join(self.source_folder, "ImGuizmo.cpp"), "CaptureMouseFromApp()", "SetNextFrameWantCaptureMouse(true)")
         cmake = CMake(self)
         cmake.configure(build_script_folder=self.source_path.parent)
         cmake.build()
