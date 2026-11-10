@@ -38,7 +38,9 @@ class ImplotConan(ConanFile):
             self.options.rm_safe("fPIC")
 
     def requirements(self):
-        self.requires("imgui/1.92.5", transitive_headers=True)
+        postfix = "-docking" if str(self.version).endswith("-docking") else ""
+
+        self.requires(f"imgui/1.92.9b{postfix}", transitive_headers=True)
 
     def layout(self):
         cmake_layout(self, src_folder="src")
