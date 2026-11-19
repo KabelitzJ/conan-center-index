@@ -15,6 +15,14 @@ sources:
     testengine:
       url: "https://github.com/ocornut/imgui_test_engine/archive/v1.92.9.tar.gz"
       sha256: "6f48d2eeedc60c7857c4cc7ee7129ade50a6a932bfeb66b5e116bd2f6733af2b"
+  "1.92.8":
+    core:
+      url: "https://github.com/ocornut/imgui/archive/v1.92.8.tar.gz"
+      sha256: "fecb33d33930e12ff53a34064e9d3a06c8f7c3e04408f14cd36c80e3faac863b"
+  "1.92.8-docking":
+    core:
+      url: "https://github.com/ocornut/imgui/archive/v1.92.8.tar.gz"
+      sha256: "fecb33d33930e12ff53a34064e9d3a06c8f7c3e04408f14cd36c80e3faac863b"
   "1.91.8":
     core:
       url: "https://github.com/ocornut/imgui/archive/v1.91.8.tar.gz"

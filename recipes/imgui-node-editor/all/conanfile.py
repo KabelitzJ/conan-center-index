@@ -43,7 +43,7 @@ class ImGuiNodeEditorConan(ConanFile):
 
     def requirements(self):
         postfix = "-docking" if str(self.version).endswith("-docking") else ""
-        self.requires(f"imgui/1.92.8{postfix}", transitive_headers=True)
+        self.requires(f"imgui/1.92.9b{postfix}", transitive_headers=True)
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)

@@ -39,7 +39,8 @@ class ImplotConan(ConanFile):
 
     def requirements(self):
         postfix = "-docking" if str(self.version).endswith("-docking") else ""
-        self.requires(f"imgui/1.92.8{postfix}", transitive_headers=True)
+
+        self.requires(f"imgui/1.92.9b{postfix}", transitive_headers=True)
 
     def layout(self):
         cmake_layout(self, src_folder="src")
